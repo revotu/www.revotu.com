@@ -26,7 +26,7 @@ driver.quit()
 ```python
 # coding: utf-8
 # proxy.py
-# "Selenium + Chrome"设置带用户名密码的proxy代理
+# Selenium Chrome设置带用户名密码的proxy代理
 import os
 import re
 import time
