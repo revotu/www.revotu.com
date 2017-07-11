@@ -20,6 +20,7 @@ print(driver.page_source)
 time.sleep(15)
 driver.quit()
 ```
+<!-- more -->
 ## 设置私有的proxy代理方式 ##
 由于私有的proxy代理需要设置用户名密码，但chrome options并不支持`USERNAME:PASSWD@IP:PORT`这种方式，因此考虑用chrome插件实现自动代理用户名密码认证的方法。根据指定的代理`USERNAME:PASSWD@IP:PORT`自动创建一个Chrome代理插件，然后就可以在"Selenium + Chrome Driver"中通过安装该插件实现代理配置功能，具体代码如下。
 ```python
