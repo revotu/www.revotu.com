@@ -14,7 +14,7 @@ PROXY = '219.153.76.77:8080'
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--proxy-server={0}'.format(PROXY))
 driver = webdriver.Chrome(chrome_options=chrome_options)
-driver.get('http://httpbin.org/ip')
+driver.get('http://httpbin.org/ip') # 访问一个IP回显网站，查看代理配置是否生效了
 print(driver.page_source)
 
 time.sleep(15)
