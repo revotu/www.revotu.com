@@ -111,6 +111,16 @@ True
 >>> random.choice(L)
 'Python'
 ```
+## 乱序list##
+用`random.shuffle()`方法，返回值为None，原地打乱list。
+```Python
+>>> import random
+>>> L = [1,2,3,4,5]
+>>> random.shuffle(L)
+>>> L
+[2, 5, 4, 3, 1]
+>>> 
+```
 ## 向列表中添加元素至首位 ##
 用`list.insert(i, x)`方法，或是直接列表相加。
 ```Python
