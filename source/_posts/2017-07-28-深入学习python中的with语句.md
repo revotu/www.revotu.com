@@ -37,7 +37,7 @@ try:
 finally:
     somefile.close()
 ```
-比较起来，使用 with 语句可以减少编码量。已经加入对上下文管理协议支持的还有模块 threading、decimal 等。
+比较起来，使用 with 语句可以减少编码量。已经加入对上下文管理器支持的还有模块 threading、decimal 等。
 
 [PEP 0343](https://www.python.org/dev/peps/pep-0343/) 对 with 语句的实现进行了描述。with 语句的执行过程类似如下代码块：
 ```python
