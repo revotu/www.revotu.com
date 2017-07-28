@@ -42,7 +42,7 @@ finally:
 [PEP 0343](https://www.python.org/dev/peps/pep-0343/) 对 with 语句的实现进行了描述。with 语句的执行过程类似如下代码块：
 ```python
 context_manager = context_expression
-exit = type(context_manager).__exit__  
+exit = type(context_manager).__exit__   #此时还未调用
 value = type(context_manager).__enter__(context_manager)
 exc = True   # True 表示正常执行，即便有异常也忽略；False 表示重新抛出异常，需要对异常进行处理
 try:
