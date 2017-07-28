@@ -84,3 +84,47 @@ with open('input.txt', 'r') as source:
 with open('input.txt', 'r') as source, open('output.txt', 'w') as target:
     target.write(source.read())
 ```
+## 自定义上下文管理器 ##
+任何实现了`__enter__()`和`__exit__()`方法的对象都可以用于上下文管理器。下面以数据库事务为例，讲解如何自定义上下文管理器。
+假如有个对象可以代表数据库连接，我们的目标是可以让使用者可以这样写代码：
+```python
+db_connection = DatabaseConnection()
+with db_connection as cursor:
+    cursor.execute('insert into ...')
+    cursor.execute('delete from ...')
+    # ... more operations ...
+```
+如果with语句体中的所有操作都执行成功，则事务被提交，否则有异常出现，则回滚代码，所有操作都不执行。这是我认为的`DatabaseConnection`的基本接口：
+```python
+class DatabaseConnection:
+    # Database interface
+    def cursor(self):
+        "Returns a cursor object and starts a new transaction"
+    def commit(self):
+        "Commits current transaction"
+    def rollback(self):
+        "Rolls back current transaction"
+```
+此处的`__enter__()`方法是很简单的，仅仅是开始一个新的事务。返回的是`cursor`对象，以便可以用with语句中的`as cursor`绑定`cursor`这个变量名。
+```python
+class DatabaseConnection:
+    ...
+    def __enter__(self):
+        # Code to start a new transaction
+        cursor = self.cursor()
+        return cursor
+```
+此处的`__exit__()`方法相对来说是复杂的，因为在这里完成了要做的大部分事情。`__exit__()`方法必须检查是否有异常出现，如果有没有异常，则事务被提交，如果有异常，则事务被回滚。
+下面的代码中，`__exit__()`方法执行完的返回值是`None`。`None`在逻辑判断时也表示false，因此有异常将会自动向外层抛出。
+```python
+class DatabaseConnection:
+    ...
+    def __exit__(self, type, value, tb):
+        if tb is None:
+            # No exception, so commit
+            self.commit()
+        else:
+            # Exception occurred, so rollback.
+            self.rollback()
+            # return False
+```
