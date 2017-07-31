@@ -132,3 +132,80 @@ class DatabaseConnection:
             self.rollback()
             # return False
 ```
+## contextlib 模块 ##
+contextlib 模块提供了3个对象：装饰器 contextmanager、函数 nested 和上下文管理器 closing。使用这些对象，可以对已有的生成器函数或者对象进行包装， 使其支持上下文管理器，避免了专门编写上下文管理器来支持 with 语句。
+### 装饰器 contextmanager ###
+contextmanager 用于对生成器函数进行装饰，生成器函数被装饰以后，返回的是一个上下文管理器，其`__enter__()` 和`__exit__()` 方法由 contextmanager 负责提供，生成器函数中 yield 之前的语句在`__enter__()` 方法中执行，yield 之后的语句在`__exit__()` 中执行，而 yield 产生的值赋给了 as 子句中的 value 变量。用这个装饰器，上面数据库事务的例子可以这么写：
+```python
+from contextlib import contextmanager
+
+@contextmanager
+def db_transaction(connection):
+    cursor = connection.cursor()
+    try:
+        yield cursor
+    except:
+        connection.rollback()
+        raise
+    else:
+        connection.commit()
+
+db = DatabaseConnection()
+with db_transaction(db) as cursor:
+    ...
+```
+### 函数 nested ###
+nested 可以将多个上下文管理器组织在一起，避免使用嵌套 with 语句。语法如下：
+```python
+with nested(A(), B(), C()) as (X, Y, Z):
+     # with-body code here
+```
+类似于下面的执行过程：
+```python
+with A() as X:
+    with B() as Y:
+        with C() as Z:
+             # with-body code here
+```
+Python 2.7和以后的版本不赞成使用nested(),因为可以直接嵌套：
+```python
+with A() as X, B() as Y, C() as Z:
+    # with-body code here
+```
+### 上下文管理器 closing ###
+closing 的实现如下：
+```python
+class closing(object):
+    """Context to automatically close something at the end of a block.
+
+    Code like this:
+
+        with closing(<module>.open(<arguments>)) as f:
+            <block>
+
+    is equivalent to this:
+
+        f = <module>.open(<arguments>)
+        try:
+            <block>
+        finally:
+            f.close()
+
+    """
+    def __init__(self, thing):
+        self.thing = thing
+    def __enter__(self):
+        return self.thing
+    def __exit__(self, *exc_info):
+        self.thing.close()
+```
+上下文管理器会将包装的对象赋值给 as 子句的 target 变量，同时保证打开的对象在 with-body 执行完后会关闭掉（调用对象的close方法）。
+```python
+import urllib, sys
+from contextlib import closing
+
+with closing(urllib.urlopen('http://www.yahoo.com')) as f:
+    for line in f:
+        sys.stdout.write(line)
+```
+closing 适用于提供了 close() 实现的对象，比如网络连接、数据库连接等，也可以在自定义类时通过接口 close() 来执行所需要的资源“清理”工作。
