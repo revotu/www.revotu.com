@@ -1,5 +1,5 @@
 ---
-title: 全面剖析Python列表(list)的各方法及各操作的内部实现
+title: 全面剖析Python列表list的各方法及各操作的内部实现
 date: 2017-09-03 12:45:42
 tags: [Python]
 permalink: python-list-methods-and-examples
@@ -307,11 +307,12 @@ False
 对外接口示例：
 ```python
 >>> L = [1, 2, 3]
->>> getattr(L, '__hash__')
->>> getattr(L, 'a')
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-AttributeError: 'list' object has no attribute 'a'
+>>> dir(L)
+['__add__', '__class__', '__contains__', '__delattr__', '__delitem__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__', '__gt__', '__hash__', '__iadd__', '__imul__', '__init__', '__iter__', '__le__', '__len__', '__lt__', '__mul__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__reversed__', '__rmul__', '__setattr__', '__setitem__', '__sizeof__', '__str__', '__subclasshook__', 'append', 'clear', 'copy', 'count', 'extend', 'index', 'insert', 'pop', 'remove', 'reverse', 'sort']
+>>> getattr(L, '__add__')
+<method-wrapper '__add__' of list object at 0x7fc3e34ca288>
+>>> getattr(L, 'sort')
+<built-in method sort of list object at 0x7fc3e34ca288>
 >>> 
 ```
 ### 通过索引下标的方式访问元素 ###
@@ -471,18 +472,22 @@ True
 True
 >>> 
 ```
-### *运算符重复列表元素多少次 ###
+### *运算符重复列表元素多少次(左乘和右乘) ###
 内部实现方法：
 ```python
     def __mul__(self, *args, **kwargs):
         """ Return self*value.n """
         pass
+    def __rmul__(self, *args, **kwargs):
+        """ Return self*value. """
+        pass		
 ```
 对外接口示例：
 ```python
 >>> L = [1, 2, 3]
->>> L = L * 3
->>> L
+>>> L * 3
+[1, 2, 3, 1, 2, 3, 1, 2, 3]
+>>> 3 * L
 [1, 2, 3, 1, 2, 3, 1, 2, 3]
 >>> 
 ```

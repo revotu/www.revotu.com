@@ -408,11 +408,12 @@ True
 对外接口示例：
 ```python
 >>> D = {'A': 1, 'B': 2, 'C': 3}
->>> getattr(D, '__hash__')
->>> getattr(D, 'sss')
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-AttributeError: 'dict' object has no attribute 'sss'
+>>> dir(D)
+['__class__', '__contains__', '__delattr__', '__delitem__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__', '__gt__', '__hash__', '__init__', '__iter__', '__le__', '__len__', '__lt__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__setitem__', '__sizeof__', '__str__', '__subclasshook__', 'clear', 'copy', 'fromkeys', 'get', 'items', 'keys', 'pop', 'popitem', 'setdefault', 'update', 'values']
+>>> getattr(D, '__class__')
+<class 'dict'>
+>>> getattr(D, 'values')
+<built-in method values of dict object at 0x7fc3e354da88>
 >>> 
 ```
 ### 创建可迭代对象 ###
