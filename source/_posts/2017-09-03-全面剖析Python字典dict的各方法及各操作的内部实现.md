@@ -415,7 +415,7 @@ Traceback (most recent call last):
 AttributeError: 'dict' object has no attribute 'sss'
 >>> 
 ```
-### 实现iter()函数的接口  ###
+### 创建可迭代对象 ###
 内部实现方法：
 ```python
     def __iter__(self, *args, **kwargs):
