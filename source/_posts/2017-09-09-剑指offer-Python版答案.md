@@ -22,6 +22,46 @@ class Solution:
     def replaceSpace(self, s):
         return s.replace(' ', '%20')
 ```
+### 正则表达式匹配 ###
+题目描述：[在线编程](https://www.nowcoder.com/practice/45327ae22b7b413ea21df13ee7d6429c?tpId=13&tqId=11205&tPage=3&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+> 请实现一个函数用来匹配包括`.`和`*`的正则表达式。模式中的字符`.`表示任意一个字符，而`*`表示它前面的字符可以出现任意次（包含0次）。 在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串"aaa"与模式"a.a"和"ab*ac*a"匹配，但是与"aa.a"和"ab*a"均不匹配
+
+分析：
+> 直接使用python中的正则表达式进行完全匹配即可解决此问题。
+
+代码：
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    # s, pattern都是字符串
+    def match(self, s, pattern):
+        import re
+        result = re.findall('^' + pattern + '$', s)
+        if result:
+            return True
+        else:
+            return False
+```
+### 表示数值的字符串 ###
+题目描述：[在线编程](https://www.nowcoder.com/practice/6f8c901d091949a5837e24bb82a731f2?tpId=13&tqId=11206&tPage=3&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
+> 请实现一个函数用来判断字符串是否表示数值（包括整数和小数）。例如，字符串"+100","5e2","-123","3.1416"和"-1E-16"都表示数值。 但是"12e","1a3.14","1.2.3","+-5"和"12e+4.3"都不是。
+
+分析：
+> 可以用float函数是否抛出`ValueError`异常来判断，或是直接写正则表达式。
+
+代码：
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    # s字符串
+    def isNumeric(self, s):
+        try:
+            float(s)
+        except ValueError:
+            return False
+        else:
+            return True
+```
 ## 数组 ##
 ### 数组中只出现一次的数字 ###
 题目描述：[在线编程](https://www.nowcoder.com/practice/e02fdb54d7524710a7d664d082bb7811?tpId=13&tqId=11193&tPage=1&rp=1&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking)
